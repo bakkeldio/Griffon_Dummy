@@ -60,8 +60,6 @@ class SignIn : Fragment(), ClientContract.View, KoinComponent {
                 .load(url)
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
                 .into(logo)
-
-
         }
 
     }
