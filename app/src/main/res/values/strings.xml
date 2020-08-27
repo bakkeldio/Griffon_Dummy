@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Griffon_Dummy</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="terms_and_conditions">I agree with terms and conditions</string>
+</resources>

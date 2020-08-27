@@ -1,0 +1,2 @@
+rootProject.name='Griffon_Dummy'
+include ':app'
