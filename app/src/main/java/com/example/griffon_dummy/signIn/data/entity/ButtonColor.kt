@@ -1,4 +1,4 @@
-package com.example.griffon_dummy.dataClasses
+package com.example.griffon_dummy.signIn.data
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

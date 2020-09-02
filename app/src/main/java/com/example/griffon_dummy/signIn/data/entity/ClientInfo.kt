@@ -1,6 +1,7 @@
-package com.example.griffon_dummy.dataClasses
+package com.example.griffon_dummy.signIn.data
 
 import android.os.Parcelable
+import com.example.griffon_dummy.dataClasses.SignUpType
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 

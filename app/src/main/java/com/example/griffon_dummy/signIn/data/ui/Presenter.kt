@@ -1,14 +1,8 @@
 package com.example.griffon_dummy.presenter
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Color
-import com.example.griffon_dummy.ClientRepoI
-import com.example.griffon_dummy.Dummy
-import com.example.griffon_dummy.dataClasses.ClientInfo
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.example.griffon_dummy.signIn.data.data.ClientRepoI
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 class Presenter(
     private val repository: ClientRepoI,

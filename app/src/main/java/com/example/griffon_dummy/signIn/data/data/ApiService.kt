@@ -1,8 +1,8 @@
 package com.example.griffon_dummy
 
-import com.example.griffon_dummy.dataClasses.ClientInfo
+import com.example.griffon_dummy.signIn.data.ClientInfo
+
 import io.reactivex.Observable
-import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -12,4 +12,6 @@ interface ApiService {
         @Query("client_id") clientId: String,
         @Query("client_secret") clientSecret: String
     ): Observable<ClientInfo>
+
+
 }

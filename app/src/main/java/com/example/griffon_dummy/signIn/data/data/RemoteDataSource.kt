@@ -1,6 +1,6 @@
 package com.example.griffon_dummy
 
-import com.example.griffon_dummy.dataClasses.ClientInfo
+import com.example.griffon_dummy.signIn.data.ClientInfo
 import io.reactivex.Observable
 
 

@@ -7,9 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
-import com.example.griffon_dummy.presenter.ClientContract
+import com.example.griffon_dummy.signIn.data.ui.ClientContract
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -77,10 +78,7 @@ class SignIn : Fragment(), ClientContract.View, KoinComponent {
         super.onViewCreated(view, savedInstanceState)
         val instanceSignUp = SignUp()
         signUp.setOnClickListener {
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.fragment_container, instanceSignUp)
-                ?.addToBackStack(null)
-                ?.commit()
+            findNavController().navigate(SignInDirections.toSignUp())
         }
 
     }
