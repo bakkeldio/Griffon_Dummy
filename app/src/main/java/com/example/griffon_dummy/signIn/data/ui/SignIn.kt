@@ -1,17 +1,29 @@
-package com.example.griffon_dummy
+package com.example.griffon_dummy.signIn.data.ui
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-
-import com.example.griffon_dummy.signIn.data.ui.ClientContract
+import com.example.griffon_dummy.GlideApp
+import com.example.griffon_dummy.R
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_sign_in.*
+import kotlinx.android.synthetic.main.fragment_sign_in.logo
+import kotlinx.android.synthetic.main.fragment_sign_up.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
@@ -69,6 +81,12 @@ class SignIn : Fragment(), ClientContract.View, KoinComponent {
         this.view?.setBackgroundColor(Color.parseColor(color))
     }
 
+    override fun successfullySignIn() {
+      val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.popup)
+        dialog.show()
+    }
+
     override fun updateButton(colors: IntArray) {
         signIn.background = GradientDrawable(GradientDrawable.Orientation.BL_TR, colors)
     }
@@ -76,10 +94,31 @@ class SignIn : Fragment(), ClientContract.View, KoinComponent {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val instanceSignUp = SignUp()
         signUp.setOnClickListener {
             findNavController().navigate(SignInDirections.toSignUp())
         }
+        signIn.setOnClickListener {
+            presenter.getAccessToken(emailSignIn.text.toString(), passwordSignIn.text.toString())
+        }
+
+        val textView : TextView = forgotPassword
+
+        val ss = SpannableString(forgotPassword.text.toString())
+        val clickableSpan1 = object  : ClickableSpan(){
+            override fun onClick(widget: View) {
+                findNavController().navigate(SignInDirections.toPasswordReset())
+            }
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+
+                ds.color = Color.RED
+                ds.isUnderlineText = true
+            }
+        }
+
+        ss.setSpan(clickableSpan1,0, forgotPassword.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        textView.text = ss
+        textView.movementMethod = LinkMovementMethod.getInstance()
 
     }
 }

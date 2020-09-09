@@ -1,5 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/signIn">
+    <fragment
+        android:id="@+id/signIn"
+        android:name="com.example.griffon_dummy.signIn.data.ui.SignIn"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in">
+        <action android:id="@+id/toSignUp"
+            app:destination="@+id/signUp"/>
+        <action android:id="@+id/toPasswordReset"
+            app:destination="@+id/password_reset"/>
 
+    </fragment>
+
+    <fragment
+        android:id="@+id/password_reset"
+        android:name="com.example.griffon_dummy.resetPassword.ui.PasswordReset"
+        android:label="fragment_password_reset"
+        tools:layout="@layout/fragment_password_reset">
+        <action android:id="@+id/toUpdatePassword"
+            app:destination="@+id/update_password"/>
+        <action android:id="@+id/toConfirmOTP"
+            app:destination="@+id/confirm_otp">
+            <argument
+                android:name="time"
+                app:argType="string"
+                android:defaultValue="1" />
+            <argument
+                android:name="username"
+                app:argType="string"/>
+            <argument
+                android:name="reset_option"
+                app:argType="string"/>
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/confirm_otp"
+        android:name="com.example.griffon_dummy.resetPassword.ui.ConfirmOTP"
+        android:label="fragment_confirm_o_t_p"
+        tools:layout="@layout/fragment_confirm_o_t_p">
+        <argument
+            android:name="time"
+            app:argType="string"
+            android:defaultValue="0" />
+        <argument
+            android:name="sid"
+            app:argType="string"
+            android:defaultValue="0"/>
+
+        <argument
+            android:name="username"
+            app:argType="string"/>
+        <argument
+            android:name="reset_option"
+            app:argType="string"/>
+
+        <action android:id="@+id/toUpdatePassword"
+            app:destination="@+id/update_password">
+            <argument
+                android:name="sid"
+                app:argType="string"
+                android:defaultValue="1"/>
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/update_password"
+        android:name="com.example.griffon_dummy.resetPassword.ui.UpdatePassword"
+        android:label="fragment_update_password"
+        tools:layout="@layout/fragment_update_password">
+        <argument
+            android:name="sid"
+            app:argType="string"
+            android:defaultValue="000000"/>
+        <action android:id="@+id/toSignIn"
+            app:destination="@+id/signIn">
+        </action>
+    </fragment>
+    <fragment
+        android:id = "@+id/signUp"
+        android:name="com.example.griffon_dummy.signUp.data.ui.SignUp"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up">
+        <action android:id="@+id/toSignIn"
+            app:destination="@+id/signIn"/>
+        <action android:id="@+id/toSignUpSms"
+            app:destination="@+id/signUpSms"/>
+        <action android:id="@+id/toMainSignUp"
+            app:destination="@+id/mainSignUp"/>
+    </fragment>
+    <fragment
+        android:id="@+id/signUpSms"
+        android:name="com.example.griffon_dummy.signUp.data.ui.SignUpSms"
+        android:label="fragment_sign_up_sms"
+        tools:layout="@layout/fragment_sign_up_sms" >
+        <action android:id="@+id/toMainSignUp"
+            app:destination="@+id/mainSignUp"/>
+    </fragment>
+    <fragment
+        android:id="@+id/mainSignUp"
+        android:name="com.example.griffon_dummy.signUp.data.ui.MainSignUp"
+        android:label="fragment_main_sign_up"
+        tools:layout="@layout/fragment_main_sign_up" >
+        <action android:id="@+id/toSignIn"
+            app:destination="@+id/signIn"/>
+    </fragment>
 </navigation>

@@ -1,8 +1,8 @@
-package com.example.griffon_dummy
-
+package com.example.griffon_dummy.signUp.data.ui
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableString
@@ -16,9 +16,13 @@ import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.griffon_dummy.presenter.ContractView
+import com.example.griffon_dummy.GlideApp
+import com.example.griffon_dummy.R
+import com.example.griffon_dummy.signUp.data.data.SignUpService
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 import kotlinx.android.synthetic.main.fragment_sign_up.logo
 import org.koin.core.KoinComponent
@@ -27,9 +31,8 @@ import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
 
 
-class SignUp : Fragment(),ContractView.View, KoinComponent{
+class SignUp : Fragment(), ContractView.View, KoinComponent{
 
-    private val signUpService : SignUpService by inject()
     private val presenter: ContractView.SignUpPresenter by inject{parametersOf(this)}
 
     override fun onCreateView(
@@ -44,18 +47,25 @@ class SignUp : Fragment(),ContractView.View, KoinComponent{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         presenter.getSignUpResult()
 
         onNext.setOnClickListener{
 
+
+
             if (checkbox.isChecked) {
 
                 if (emailNumber.text.toString().isValidEmail()) {
+                    val bundle = bundleOf("email" to emailNumber.text.toString())
+                    findNavController().navigate(R.id.toMainSignUp,bundle)
 
                 }
-                if (emailNumber.text.toString().isValidMobile()) {
+                else if (emailNumber.text.toString().isValidMobile()){
+                    presenter.giveNumber(emailNumber.text.toString())
+                }
+                else {
 
-                } else {
                     emailNumber.error = "Provide correct email or Phone number"
                 }
             }
@@ -63,9 +73,15 @@ class SignUp : Fragment(),ContractView.View, KoinComponent{
                 Toast.makeText(context, "Check terms and conditions", Toast.LENGTH_LONG).show()
             }
 
+
         }
 
 
+    }
+
+    override fun onDestroy() {
+        presenter.onDestroy()
+        super.onDestroy()
     }
 
 
@@ -79,7 +95,8 @@ class SignUp : Fragment(),ContractView.View, KoinComponent{
     override fun updateImage(imageUrl: String) {
         Glide.with(this)
             .load(imageUrl)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .centerCrop()
+            .diskCacheStrategy(DiskCacheStrategy.DATA)
             .into(logo)
     }
 
@@ -89,28 +106,8 @@ class SignUp : Fragment(),ContractView.View, KoinComponent{
         val ss = SpannableString(text)
         val clickableSpan1 = object  : ClickableSpan(){
             override fun onClick(widget: View) {
-                /*
-                web.settings.javaScriptEnabled = true
-                web.settings.domStorageEnabled = true
-                web.webViewClient = WebViewClient()
-                web.loadUrl(url)
-                web.canGoBack()
-                web.setOnKeyListener{ v, keyCode, event ->
-                    if(keyCode == KeyEvent.KEYCODE_BACK && event.action == MotionEvent.ACTION_UP
-                        && web.canGoBack()){
-                        web.goBack()
-                        return@setOnKeyListener true
-                    }
-                    false
-                }
-                textInputLayout.visibility = View.GONE
-                backSignIn.visibility = View.GONE
-                onNext.visibility = View.GONE
-            }
 
-                 */
                 url.asUri().openInBrowser(context!!)
-
 
             }
             override fun updateDrawState(ds: TextPaint) {
@@ -126,6 +123,14 @@ class SignUp : Fragment(),ContractView.View, KoinComponent{
         textView.movementMethod = LinkMovementMethod.getInstance()
     }
 
+    override fun updateButton(colors: IntArray) {
+        onNext.background = GradientDrawable(GradientDrawable.Orientation.BL_TR, colors)
+    }
+
+    override fun takeSidDuration(sid: String, time: String) {
+        val bundle = bundleOf("sid" to sid, "time" to time)
+        findNavController().navigate(R.id.signUpSms, bundle)
+    }
 
 
     fun Uri?.openInBrowser(context: Context){
