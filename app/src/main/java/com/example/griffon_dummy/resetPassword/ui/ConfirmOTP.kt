@@ -25,9 +25,8 @@ private const val ARG_PARAM2 = "param2"
 class ConfirmOTP : Fragment(), ContractOtp.View1 {
     val presenter : ContractOtp.Presenter by inject { parametersOf(this)}
 
-    var resendClicked : Boolean = false
     private lateinit var countdownTimer: CountDownTimer
-    var isRunning: Boolean = false;
+    private var isRunning: Boolean = false;
     var timeInMilliSeconds = 0L
 
     private val args : ConfirmOTPArgs by navArgs()
@@ -50,23 +49,24 @@ class ConfirmOTP : Fragment(), ContractOtp.View1 {
 
         startTimer(timeInMilliSeconds)
 
+        //Button verify
         verifyButton2.setOnClickListener {
-            if (enterCode.text.toString().isNotEmpty() && !resendClicked){
-                Toast.makeText(requireContext(), "Args sid was received!", Toast.LENGTH_LONG).show()
-                presenter.putCode(args.sid, enterCode.text.toString())
+            if (enterCode.text.toString().isNotEmpty() ){
+                val bundle = Bundle()
+                presenter.putCode(if (bundle.get("sid")!= null) bundle.getString("sid")!!
+                else args.sid, enterCode.text.toString())
 
             }
-            else{
-                val bundle = Bundle()
-                presenter.putCode(bundle.getString("sid")!!, enterCode.text.toString())
-            }
         }
+
+        //Getting the design for fragment
         presenter.getDesign()
+
         timeToConfirm.text = args.time
 
         resendOtp.setOnClickListener {
-            resendClicked = true
-            presenter.resendOtp(args.username, args.resetOption)
+            Toast.makeText(context, args.username, Toast.LENGTH_LONG).show()
+            presenter.resendOtp(args.username,args.resetOption)
             textInputLayout.visibility = View.VISIBLE
             timeToConfirm.visibility = View.VISIBLE
             timeToConfirm.text = args.time
@@ -79,6 +79,8 @@ class ConfirmOTP : Fragment(), ContractOtp.View1 {
 
     override fun onStop() {
         countdownTimer.cancel()
+        val bundle = Bundle()
+        bundle.clear()
         super.onStop()
     }
 
@@ -104,10 +106,12 @@ class ConfirmOTP : Fragment(), ContractOtp.View1 {
             .into(logoReset)
     }
 
+
+    //Getting sid from resendOtp
     override fun getSid(sid: String) {
         Toast.makeText(context, "Sid is received!", Toast.LENGTH_LONG).show()
         val bundle = Bundle()
-        bundle.putString("sid", "0")
+        bundle.putString("sid", sid)
     }
 
     private fun startTimer(time_in_seconds: Long) {
@@ -133,7 +137,6 @@ class ConfirmOTP : Fragment(), ContractOtp.View1 {
     }
 
     override fun getSid1(message: String) {
-        Toast.makeText(requireContext(), "Sid was received!", Toast.LENGTH_LONG).show()
         val action = ConfirmOTPDirections.toUpdatePassword(message)
         findNavController().navigate(action)
     }

@@ -38,8 +38,8 @@ class ConfirmOtpPresenter(
         compositeDisposable.dispose()
     }
 
-    override fun resendOtp(username: String, reset_option: String) {
-        val results = remoteRepositoryI.getOtpFromResend(username).subscribe({
+    override fun resendOtp(username: String,resent_option: String) {
+        val results = remoteRepositoryI.getOtpForUsername(username,resent_option).subscribe({
             view?.getSid(it.sid)
         },{
             it.printStackTrace()
@@ -53,7 +53,7 @@ interface ContractOtp{
         fun getDesign()
         fun putCode(sid: String, code: String)
         fun onDestroy()
-        fun resendOtp(username: String, reset_option: String)
+        fun resendOtp(username: String,resent_option : String)
     }
     interface View1{
         fun updateButton(colors : IntArray)

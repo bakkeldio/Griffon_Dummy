@@ -18,8 +18,8 @@ class PasswordPresenter(
 
 
 
-    override fun getOtpForUsername(username: String) {
-        val result = resetRepositoryI.getOtpForUsername(username)
+    override fun getOtpForUsername(username: String,reset_option: String) {
+        val result = resetRepositoryI.getOtpForUsername(username,reset_option)
             .subscribe({
                 view?.getMessage(it.add_info, it.sid)
             },{
@@ -44,7 +44,7 @@ class PasswordPresenter(
 interface ContractView{
     interface Presenter{
         fun onDestroy()
-        fun getOtpForUsername(username: String)
+        fun getOtpForUsername(username: String, reset_option :String)
         fun getSP()
     }
     interface View1{

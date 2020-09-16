@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -18,7 +19,7 @@ import org.koin.core.parameter.parametersOf
 
 
 class UpdatePassword : Fragment(), Contract.View {
-    val args : UpdatePasswordArgs by navArgs()
+    private val args : UpdatePasswordArgs by navArgs()
 
     val presenter : Contract.Presenter by inject{ parametersOf(this)}
 
@@ -37,7 +38,8 @@ class UpdatePassword : Fragment(), Contract.View {
         presenter.getDesign()
         updateButton.setOnClickListener {
             if (updatePassword.text.toString().isNotEmpty() && updateConfirmPassword.text.toString().isNotEmpty()){
-                presenter.getUpdatePasswordConfirm(args.sid, updateConfirmPassword.text.toString())
+                Toast.makeText(context, args.sid, Toast.LENGTH_LONG).show()
+                presenter.getUpdatePasswordConfirm(args.sid, updatePassword.text.toString())
             }
             else{
                 if(updatePassword.text.toString().isEmpty()){
@@ -52,6 +54,11 @@ class UpdatePassword : Fragment(), Contract.View {
 
     }
 
+    override fun onDestroy() {
+        presenter.onDestroy()
+        super.onDestroy()
+    }
+
     override fun updateButton(colors: IntArray) {
         updateButton.background = GradientDrawable(GradientDrawable.Orientation.BL_TR, colors)
     }
@@ -62,7 +69,8 @@ class UpdatePassword : Fragment(), Contract.View {
             .into(logo_update)
     }
 
-    override fun getSuccessMessage() {
+    override fun getSuccessMessage(message :String) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
         findNavController().navigate(UpdatePasswordDirections.toSignIn())
     }
 

@@ -24,11 +24,11 @@
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="193dp"
+        android:layout_marginTop="150dp"
         android:layout_marginEnd="411dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_begin="198dp"
+        app:layout_constraintGuide_begin="177dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -67,7 +67,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+        app:layout_constraintTop_toBottomOf="@+id/emailNumberSignUp">
 
         <CheckBox
             android:id="@+id/checkbox"
@@ -88,20 +88,25 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/emailNumberSignUp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="287dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        app:boxStrokeErrorColor="#AF1B1B"
+        app:errorEnabled="true"
+        app:errorTextAppearance="@style/ErrorTextAppearance"
+        app:errorTextColor="#AF1B1B"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailLabel">
+        app:layout_constraintTop_toBottomOf="@+id/emailLabel"
+        app:startIconDrawable="@drawable/ic_person_black_24dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailNumber"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/border"
             android:hint="Email or Phone number"
             android:inputType="textEmailAddress"
             android:padding="5dp" />
@@ -111,7 +116,7 @@
         android:id="@+id/onNext"
         android:layout_width="286dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="25dp"
         android:text="Next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.512"
@@ -122,7 +127,7 @@
         android:id="@+id/backSignIn"
         android:layout_width="286dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="20dp"
         android:background="#FFFFFF"
         android:text="Sign In"
         app:layout_constraintEnd_toEndOf="parent"

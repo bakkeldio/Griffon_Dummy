@@ -1,6 +1,5 @@
-package com.example.griffon_dummy.resetPassword.data
+package com.example.griffon_dummy.profile.data
 
-import com.example.griffon_dummy.signUp.data.data.SignUpService
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
@@ -8,20 +7,19 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-val reset_module = module {
-    factory<RemoteDataI> {RemoteDataSource(get())}
-    factory<LocalDataI>{  LocalDataSource(get())}
-    single { generatePasswordResetService(get()) }
-    factory<ResetRepositoryI> { ResetRepository(get(), get())}
+val profile_module = module {
+        factory<RemoteDataI> { RemoteDataSource(get())}
+        factory { generateProfileService(get()) }
+        factory<ProfileRepositoryI> { ProfileRepository(get()) }
 
 }
 
-private fun generatePasswordResetService(client: OkHttpClient) :PasswordResetService {
+private fun generateProfileService(client: OkHttpClient) : ProfileInterface {
     val retrofit = Retrofit.Builder()
         .baseUrl("https://griffon.dar-dev.zone")
         .client(client)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
         .build()
-    return retrofit.create(PasswordResetService::class.java)
+    return retrofit.create(ProfileInterface::class.java)
 }

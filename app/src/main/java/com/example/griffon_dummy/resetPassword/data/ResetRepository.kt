@@ -17,9 +17,9 @@ class ResetRepository(private val remoteDataI: RemoteDataI,
         return localDataI.getSP()
     }
 
-    override fun getOtpForUsername(username: String
+    override fun getOtpForUsername(username: String, reset_option: String
     ): Observable<ReceivedMessage> {
-        return remoteDataI.getMessageForUsername(username).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        return remoteDataI.getMessageForUsername(username,reset_option).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun getConfirmation(sid: String,code: String): Observable<ConfirmationResponse> {
@@ -27,21 +27,16 @@ class ResetRepository(private val remoteDataI: RemoteDataI,
     }
 
     override fun getUpdatePasswordConfirmation(code: String, newPassword: String
-    ): Completable{
+    ): Observable<UpdatePasswordConfirmation> {
         return remoteDataI.getUpdatePasswordConfirmation(code, newPassword).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun getOtpFromResend(
-        username: String
-    ): Observable<ReceivedMessage> {
-        return remoteDataI.getOtpFromResend(username).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-    }
+
 }
 interface ResetRepositoryI{
     fun getSP() : ClientInfo
-    fun getOtpForUsername( username : String): Observable<ReceivedMessage>
+    fun getOtpForUsername( username : String, reset_option: String): Observable<ReceivedMessage>
     fun getConfirmation(sid : String,code : String) : Observable<ConfirmationResponse>
-    fun getUpdatePasswordConfirmation(code: String, newPassword:String):Completable
-    fun getOtpFromResend(username: String):Observable<ReceivedMessage>
+    fun getUpdatePasswordConfirmation(code: String, newPassword:String):Observable<UpdatePasswordConfirmation>
 }

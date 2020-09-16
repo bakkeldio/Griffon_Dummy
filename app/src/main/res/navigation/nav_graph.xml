@@ -35,6 +35,9 @@
             <argument
                 android:name="reset_option"
                 app:argType="string"/>
+            <argument
+                android:name="sid"
+                app:argType="string"/>
         </action>
     </fragment>
 
@@ -75,8 +78,7 @@
         tools:layout="@layout/fragment_update_password">
         <argument
             android:name="sid"
-            app:argType="string"
-            android:defaultValue="000000"/>
+            app:argType="string" />
         <action android:id="@+id/toSignIn"
             app:destination="@+id/signIn">
         </action>
@@ -87,9 +89,20 @@
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up">
         <action android:id="@+id/toSignIn"
-            app:destination="@+id/signIn"/>
+            app:destination="@+id/signIn"
+            app:popUpTo="@+id/signIn"
+            app:popUpToInclusive="true"/>
         <action android:id="@+id/toSignUpSms"
-            app:destination="@+id/signUpSms"/>
+            app:destination="@+id/signUpSms">
+            <argument
+                android:name="sid"
+                app:argType="string"
+                android:defaultValue="0"/>
+            <argument
+                android:name="time"
+                app:argType="string"
+                android:defaultValue="0"/>
+        </action>
         <action android:id="@+id/toMainSignUp"
             app:destination="@+id/mainSignUp"/>
     </fragment>
@@ -100,6 +113,10 @@
         tools:layout="@layout/fragment_sign_up_sms" >
         <action android:id="@+id/toMainSignUp"
             app:destination="@+id/mainSignUp"/>
+        <action android:id="@+id/toSignUp"
+            app:destination="@+id/signUp"
+            app:popUpTo="@id/signUp"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/mainSignUp"

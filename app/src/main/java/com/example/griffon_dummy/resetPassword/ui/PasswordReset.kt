@@ -19,6 +19,8 @@ class PasswordReset : Fragment() , ContractView.View1{
 
     val presenter : ContractView.Presenter by inject { parametersOf(this) }
 
+    lateinit var option : String
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,10 +39,12 @@ class PasswordReset : Fragment() , ContractView.View1{
                 if (username.text!!.isNotEmpty()) {
 
                     if (username.text.toString().isValidEmail()) {
-                        presenter.getOtpForUsername(username.text.toString())
+                        option = "email"
+                        presenter.getOtpForUsername(username.text.toString(),option)
                     }
                     if (username.text.toString().isValidMobile()) {
-                        presenter.getOtpForUsername(username.text.toString())
+                        option = "phone_number"
+                        presenter.getOtpForUsername(username.text.toString(), option)
                     }
                 }
                 else{
@@ -57,9 +61,9 @@ class PasswordReset : Fragment() , ContractView.View1{
     }
 
     override fun getMessage(addInfo: String, sid : String) {
-        Toast.makeText(requireContext(), "Message was received", Toast.LENGTH_LONG)
+        Toast.makeText(requireContext(), username.text.toString(), Toast.LENGTH_LONG)
             .show()
-        val action = PasswordResetDirections.toConfirmOTP(addInfo, sid, username.text.toString())//if (username.text.toString().isValidMobile()) "phone_number" else "email")
+        val action = PasswordResetDirections.toConfirmOTP(addInfo, username.text.toString(), option,sid)//if (username.text.toString().isValidMobile()) "phone_number" else "email")
       findNavController().navigate(action)
     }
 

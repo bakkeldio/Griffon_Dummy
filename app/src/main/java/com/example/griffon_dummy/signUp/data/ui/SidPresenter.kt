@@ -8,21 +8,24 @@ import com.example.griffon_dummy.signUp.data.data.SignUpLocalI
 import com.example.griffon_dummy.signUp.data.data.SignUpRepositoryI
 
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 
-class SidPresenter(private val repositoryI: SignUpRepositoryI, var view: ContractView3.View1?)
+class SidPresenter(private val repositoryI: SignUpRepositoryI,
+                   var view: ContractView3.View1?,
+                   private val compositeDisposable: CompositeDisposable)
     : ContractView3.SidPresenter{
     override fun getCompletable(sid: String, code:String) {
         val verify = repositoryI
             .verifyPhone(sid, code)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 view?.takeSid(it.sid)
             },{
                 it.printStackTrace()
             })
+
+        compositeDisposable.add(verify)
     }
 
     override fun getDesign() {
@@ -38,6 +41,7 @@ class SidPresenter(private val repositoryI: SignUpRepositoryI, var view: Contrac
 
     override fun onDestroy() {
         view = null
+        compositeDisposable.dispose()
     }
 }
 interface ContractView3{

@@ -41,28 +41,6 @@ class SignUpSms : Fragment(), ContractView3.View1 {
         super.onViewCreated(view, savedInstanceState)
         presenter.getDesign()
         resendView.visibility = View.INVISIBLE
-        val sharedPref = activity?.getSharedPreferences("Time", Context.MODE_PRIVATE)
-        /*
-        if (sharedPref?.getInt("minutes", 0) != 0){
-            val calendar = Calendar.getInstance()
-            val minutes = calendar.get(Calendar.MINUTE)
-            val seconds = calendar.get(Calendar.SECOND) + minutes*60 - ((sharedPref!!.getInt("minutes", 0)*60+sharedPref.getInt("seconds",0)))
-
-            val timer = sharedPref.getLong("leftTime", 0)
-            val min = (timer/1000)/60
-            val sec = (timer/1000)%60 + min*60
-
-            val total = if (sec - seconds<=0) 0 else sec - seconds
-
-            time.text = total.toString()
-            timeInMilliSeconds = time.text.toString().toLong()*1000L
-            startTimer(timeInMilliSeconds)
-
-        }
-
-         */
-
-
             if (arguments != null) {
                 time.text = requireArguments().getString("time")
                 timeInMilliSeconds = time.text.toString().toLong() * 1000L
@@ -81,6 +59,10 @@ class SignUpSms : Fragment(), ContractView3.View1 {
                 )
             }
         }
+        backSignUp.setOnClickListener {
+            findNavController().navigate(SignUpSmsDirections.toSignUp())
+        }
+
 
         resendView.setOnClickListener {
             time.visibility = View.VISIBLE
@@ -115,24 +97,16 @@ class SignUpSms : Fragment(), ContractView3.View1 {
         val minute = (timeInMilliSeconds / 1000) / 60
         val seconds = (timeInMilliSeconds / 1000) % 60
 
-        time.text = "$minute:$seconds"
+
+        if (seconds <10){
+            time.text = "0$minute:0$seconds"
+        }
+        else{
+            time.text = "0$minute:$seconds"
+        }
     }
 
     override fun onStop() {
-        /*
-
-        val c = Calendar.getInstance()
-        val minutes = c.get(Calendar.MINUTE)
-        val seconds = c.get(Calendar.SECOND)
-        val sharedPref = activity?.getSharedPreferences("Time", Context.MODE_PRIVATE)
-        sharedPref!!.edit().clear().apply()
-        sharedPref.edit().putInt("minutes", minutes).apply()
-        sharedPref.edit().putInt("seconds", seconds).apply()
-        sharedPref.edit().putLong("leftTime", timeInMilliSeconds).apply()
-
-
-         */
-
         countdownTimer.cancel()
 
         super.onStop()

@@ -1,7 +1,9 @@
 package com.example.griffon_dummy.signIn.data.ui
 
 import android.graphics.Color
+import android.widget.Toast
 import com.example.griffon_dummy.signIn.data.data.ClientRepoI
+import com.example.griffon_dummy.signUp.data.entity.AccessToken
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -34,7 +36,7 @@ class Presenter(
         val token = repository.getAccessToken(username, password).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                view?.successfullySignIn()
+                view?.successfullySignIn(it)
             },{
                 it.printStackTrace()
             })
@@ -52,7 +54,7 @@ interface ClientContract {
         fun updateButton(colors : IntArray)
         fun loadLogo(url : String)
         fun updateBackground(color: String)
-        fun successfullySignIn()
+        fun successfullySignIn(token: AccessToken)
     }
 
     interface Presenter{

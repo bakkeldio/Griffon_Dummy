@@ -26,7 +26,7 @@ class Presenter(private val localDataI: LocalDataI,
     override fun getUpdatePasswordConfirm(sid: String, newPassword: String) {
         val updatePassword =remoteRepositoryI.getUpdatePasswordConfirmation(sid, newPassword)
             .subscribe ({
-            view?.getSuccessMessage()
+            view?.getSuccessMessage(it.message)
         },{
             it.printStackTrace()
         }
@@ -49,6 +49,6 @@ interface Contract{
     interface View{
         fun updateButton(colors: IntArray)
         fun updateLogo(url: String)
-        fun getSuccessMessage()
+        fun getSuccessMessage(message: String)
     }
 }

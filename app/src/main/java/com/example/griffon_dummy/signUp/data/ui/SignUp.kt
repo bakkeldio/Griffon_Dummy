@@ -1,17 +1,17 @@
 package com.example.griffon_dummy.signUp.data.ui
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.TextPaint
+import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Patterns
 import android.view.*
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
@@ -23,6 +23,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.griffon_dummy.GlideApp
 import com.example.griffon_dummy.R
 import com.example.griffon_dummy.signUp.data.data.SignUpService
+import kotlinx.android.synthetic.main.fragment_sign_in.*
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 import kotlinx.android.synthetic.main.fragment_sign_up.logo
 import org.koin.core.KoinComponent
@@ -54,27 +55,52 @@ class SignUp : Fragment(), ContractView.View, KoinComponent{
 
 
 
-            if (checkbox.isChecked) {
+            if (!checkbox.isChecked) {
 
-                if (emailNumber.text.toString().isValidEmail()) {
+                Toast.makeText(context, "Check terms and conditions", Toast.LENGTH_LONG).show()
+            }
+            when {
+                emailNumber.text.toString().isValidEmail() -> {
                     val bundle = bundleOf("email" to emailNumber.text.toString())
                     findNavController().navigate(R.id.toMainSignUp,bundle)
 
                 }
-                else if (emailNumber.text.toString().isValidMobile()){
+                emailNumber.text.toString().isValidMobile() -> {
                     presenter.giveNumber(emailNumber.text.toString())
                 }
-                else {
+                else -> {
+                    if (emailNumber.text!!.isEmpty()){
+                        emailNumberSignUp.error = "Provide username"
+                    }
+                    if (emailNumber.text!!.isNotEmpty() && (!emailNumber.text.toString().isValidMobile()||!emailNumber.text.toString().isValidEmail())){
+                        emailNumberSignUp.error = "Provide valid mobile/email"
+                    }
 
-                    emailNumber.error = "Provide correct email or Phone number"
                 }
             }
-            else{
-                Toast.makeText(context, "Check terms and conditions", Toast.LENGTH_LONG).show()
             }
 
+        emailNumber.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                if (s!!.isNotEmpty())
+                    emailNumberSignUp.error = null
 
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+        })
+        backSignIn.setOnClickListener {
+            findNavController().navigate(SignUpDirections.toSignIn())
         }
+
+
 
 
     }
@@ -91,7 +117,6 @@ class SignUp : Fragment(), ContractView.View, KoinComponent{
     private fun String.isValidMobile(): Boolean {
         return Patterns.PHONE.matcher(this).matches()
     }
-
     override fun updateImage(imageUrl: String) {
         Glide.with(this)
             .load(imageUrl)
@@ -128,6 +153,7 @@ class SignUp : Fragment(), ContractView.View, KoinComponent{
     }
 
     override fun takeSidDuration(sid: String, time: String) {
+        val action = SignUpSmsDirections
         val bundle = bundleOf("sid" to sid, "time" to time)
         findNavController().navigate(R.id.signUpSms, bundle)
     }

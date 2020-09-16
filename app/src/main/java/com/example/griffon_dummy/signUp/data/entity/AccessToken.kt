@@ -14,6 +14,6 @@ data class AccessToken(
     @SerializedName("expiration_date") val expirationDate: Calendar? = null
 ) : Parcelable {
     fun isExpired(): Boolean =
-        expirationDate != null &&
-                Calendar.getInstance().after(expirationDate)
+        expiresIn != null &&
+                expiresIn == 0
 }

@@ -1,6 +1,8 @@
 package com.example.griffon_dummy
 
 import android.app.Application
+import com.example.griffon_dummy.profile.data.profile_module
+import com.example.griffon_dummy.profile.ui.profileUI_module
 import com.example.griffon_dummy.resetPassword.data.reset_module
 import com.example.griffon_dummy.resetPassword.ui.ui_module
 import com.example.griffon_dummy.signIn.data.data.dataModule
@@ -18,7 +20,8 @@ class App : Application() {
         startKoin {
             androidContext(this@App)
             modules(
-                module,dataModule,signUpData, data, ui_module, reset_module
+                module,dataModule,signUpData, data, ui_module, reset_module, profileUI_module,
+                profile_module
             )
         }
     }
