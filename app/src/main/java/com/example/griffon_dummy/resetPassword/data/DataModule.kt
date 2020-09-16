@@ -1,6 +1,5 @@
 package com.example.griffon_dummy.resetPassword.data
 
-import com.example.griffon_dummy.signUp.data.data.SignUpService
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
@@ -13,6 +12,7 @@ val reset_module = module {
     factory<LocalDataI>{  LocalDataSource(get())}
     single { generatePasswordResetService(get()) }
     factory<ResetRepositoryI> { ResetRepository(get(), get())}
+
 
 }
 

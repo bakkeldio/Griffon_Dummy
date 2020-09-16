@@ -1,9 +1,7 @@
 package com.example.griffon_dummy.signUp.data.data
 
 import com.example.griffon_dummy.signUp.data.entity.*
-import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Single
 import retrofit2.http.*
 
 interface SignUpService {

@@ -73,9 +73,9 @@ class PasswordReset : Fragment() , ContractView.View1{
             .into(logoReset)
     }
 
-    override fun onDestroy() {
+    override fun onStop() {
         presenter.onDestroy()
-        super.onDestroy()
+        super.onStop()
     }
 
     override fun updateButton(colors: IntArray) {
