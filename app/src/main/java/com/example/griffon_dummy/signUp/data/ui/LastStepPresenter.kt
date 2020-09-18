@@ -26,11 +26,10 @@ class LastStepPresenter(
 
 
     override fun getAccessToken(username: String, password: String) {
-        val disposable = repositoryI.getAccessToken(username, password).subscribeOn(Schedulers.io())
-            .subscribeOn(AndroidSchedulers.mainThread())
+        val disposable = repositoryI.getAccessToken(username, password)
             .subscribeWith(object : Observer<AccessToken> {
                 override fun onComplete() {
-                    println("Completed !!!")
+                    view!!.getAccessTokenForEmail()
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -53,8 +52,7 @@ class LastStepPresenter(
     }
 
     override fun getAccessTokenWithPhone(sid: String, password: String) {
-        val accessToken = repositoryI.register(sid, password).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        val accessToken = repositoryI.register(sid, password)
             .subscribe({
                 view?.getAccessToken(it.accessToken)
             },
@@ -69,6 +67,7 @@ interface ContractView2{
         fun updateButton(intArray: IntArray)
         fun updateImage(url : String)
         fun getAccessToken(accessToken : String)
+        fun getAccessTokenForEmail()
     }
     interface Presenter{
         fun getClientInfo()

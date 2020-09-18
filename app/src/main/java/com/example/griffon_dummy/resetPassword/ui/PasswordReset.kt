@@ -1,5 +1,6 @@
 package com.example.griffon_dummy.resetPassword.ui
 
+import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Patterns
@@ -37,14 +38,57 @@ class PasswordReset : Fragment() , ContractView.View1{
 
             resetNext.setOnClickListener {
                 if (username.text!!.isNotEmpty()) {
-
+                    val sharedPreferences =
+                        requireActivity().getSharedPreferences("TimeRemind", Context.MODE_PRIVATE)
                     if (username.text.toString().isValidEmail()) {
-                        option = "email"
-                        presenter.getOtpForUsername(username.text.toString(),option)
+                        if (sharedPreferences.getInt(
+                                "Timer",
+                                0
+                            ) != 0 && sharedPreferences.getString(
+                                "username",
+                                ""
+                            ) == username.text.toString()
+                        ) {
+
+                            findNavController().navigate(
+                                PasswordResetDirections.toConfirmOTP(
+                                    "",
+                                    username.text.toString(),
+                                    "email",
+                                    sharedPreferences.getString("sid","")!!
+                                )
+                            )
+                        } else {
+                            sharedPreferences.edit().apply { remove("Time")
+                                remove("Timer")}.apply()
+                            option = "email"
+                            presenter.getOtpForUsername(username.text.toString(), option)
+                        }
                     }
                     if (username.text.toString().isValidMobile()) {
-                        option = "phone_number"
-                        presenter.getOtpForUsername(username.text.toString(), option)
+
+                        if (sharedPreferences.getInt(
+                                "Timer",
+                                0
+                            ) != 0 && sharedPreferences.getString(
+                                "username",
+                                ""
+                            ) == username.text.toString()
+                        ) {
+                            findNavController().navigate(
+                                PasswordResetDirections.toConfirmOTP(
+                                    "",
+                                    username.text.toString(),
+                                    "phone_number",
+                                    sharedPreferences.getString("sid","")!!
+                                )
+                            )
+                        } else {
+                            sharedPreferences.edit().apply { remove("Time")
+                                remove("Timer")}.apply()
+                            option = "phone_number"
+                            presenter.getOtpForUsername(username.text.toString(), option)
+                        }
                     }
                 }
                 else{
@@ -73,9 +117,9 @@ class PasswordReset : Fragment() , ContractView.View1{
             .into(logoReset)
     }
 
-    override fun onStop() {
+    override fun onDestroy() {
         presenter.onDestroy()
-        super.onStop()
+        super.onDestroy()
     }
 
     override fun updateButton(colors: IntArray) {

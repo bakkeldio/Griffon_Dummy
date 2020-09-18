@@ -13,6 +13,7 @@ interface SignUpService {
 
 
     //registration with email
+    @Headers("Content-type: application/json")
     @POST("api/v1/oauth/signup")
     fun signUp(
         @Body body: NewUserBody

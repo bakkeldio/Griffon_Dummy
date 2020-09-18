@@ -1,5 +1,6 @@
 package com.example.griffon_dummy.resetPassword.ui
 
+import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -18,6 +19,10 @@ import kotlinx.android.synthetic.main.fragment_confirm_o_t_p.*
 import kotlinx.android.synthetic.main.fragment_confirm_o_t_p.enterCode
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -26,11 +31,10 @@ class ConfirmOTP : Fragment(), ContractOtp.View1 {
     val presenter : ContractOtp.Presenter by inject { parametersOf(this)}
 
     private lateinit var countdownTimer: CountDownTimer
-    private var isRunning: Boolean = false;
+    private var isRunning: Boolean = false
     var timeInMilliSeconds = 0L
 
     private val args : ConfirmOTPArgs by navArgs()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,44 +47,76 @@ class ConfirmOTP : Fragment(), ContractOtp.View1 {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        resendOtp.visibility = View.INVISIBLE
+        val sharedPref = activity?.getSharedPreferences("TimeRemind", Context.MODE_PRIVATE)
+        if (sharedPref!!.getString("Time","") == "") {
 
-        timeInMilliSeconds = args.time.toLong()*1000L
+            resendOtp.visibility = View.INVISIBLE
 
-        startTimer(timeInMilliSeconds)
+            timeInMilliSeconds = args.time.toLong() * 1000L
+
+            startTimer(timeInMilliSeconds)
+
+            timeToConfirm.text = args.time
+        }
+        else {
+            resendOtp.visibility = View.INVISIBLE
+
+            val localTime = sharedPref.getString("Time", "")
+            val savedTime = sharedPref.getInt("Timer", 0)
+            if (savedTime != 0) {
+                if (localTime != "") {
+                    val localDateTime = LocalDateTime.parse(localTime).toLocalTime()
+                    val currentLocalTime = LocalTime.now()
+                    val difference: Long = Duration.between(localDateTime, currentLocalTime).seconds
+                    if (difference.minus(savedTime) > 0) {
+                        timeToConfirm.visibility = View.INVISIBLE
+                        resendOtp.visibility = View.VISIBLE
+                    } else {
+                        timeToConfirm.text = "${(savedTime - difference)}"
+                        timeInMilliSeconds = timeToConfirm.text.toString().toLong() * 1000L
+                        startTimer(timeInMilliSeconds)
+
+                    }
+                }
+            }
+
+        }
+
 
         //Button verify
         verifyButton2.setOnClickListener {
             if (enterCode.text.toString().isNotEmpty() ){
-                val bundle = Bundle()
-                presenter.putCode(if (bundle.get("sid")!= null) bundle.getString("sid")!!
-                else args.sid, enterCode.text.toString())
+                val sid = sharedPref.getString("sid","")
+                presenter.putCode(if (sid != "") sid!! else args.sid, enterCode.text.toString())
 
             }
         }
 
+
+
         //Getting the design for fragment
         presenter.getDesign()
-
-        timeToConfirm.text = args.time
 
         resendOtp.setOnClickListener {
             Toast.makeText(context, args.username, Toast.LENGTH_LONG).show()
             presenter.resendOtp(args.username,args.resetOption)
-            textInputLayout.visibility = View.VISIBLE
-            timeToConfirm.visibility = View.VISIBLE
-            timeToConfirm.text = args.time
-            timeInMilliSeconds = timeToConfirm.text.toString().toLong()*1000L
-            startTimer(timeInMilliSeconds)
-            resendOtp.visibility = View.INVISIBLE
+
         }
 
     }
 
     override fun onStop() {
+
+        val sharedPref = activity?.getSharedPreferences("TimeRemind", Context.MODE_PRIVATE)
+
+        sharedPref!!.edit().apply {  putString("Time", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
+            val minInSec = timeToConfirm.text[1].toString().toInt()*60
+            val seconds = (timeToConfirm.text[3].toString()+timeToConfirm.text[4].toString()).toInt()
+            putString("username", args.username)
+            putInt("Timer", minInSec+seconds)
+
+        }.apply()
         countdownTimer.cancel()
-        val bundle = Bundle()
-        bundle.clear()
         super.onStop()
     }
 
@@ -109,9 +145,9 @@ class ConfirmOTP : Fragment(), ContractOtp.View1 {
 
     //Getting sid from resendOtp
     override fun getSid(sid: String) {
+        val sharedPref = activity?.getSharedPreferences("TimeRemind", Context.MODE_PRIVATE)
         Toast.makeText(context, "Sid is received!", Toast.LENGTH_LONG).show()
-        val bundle = Bundle()
-        bundle.putString("sid", sid)
+        sharedPref?.edit()?.putString("sid", sid)?.apply()
     }
 
     private fun startTimer(time_in_seconds: Long) {
@@ -139,5 +175,15 @@ class ConfirmOTP : Fragment(), ContractOtp.View1 {
     override fun getSid1(message: String) {
         val action = ConfirmOTPDirections.toUpdatePassword(message)
         findNavController().navigate(action)
+    }
+
+    override fun addInfo(addInfo: String) {
+
+        textInputLayout.visibility = View.VISIBLE
+        timeToConfirm.visibility = View.VISIBLE
+        timeToConfirm.text = addInfo
+        timeInMilliSeconds = timeToConfirm.text.toString().toLong()*1000L
+        startTimer(timeInMilliSeconds)
+        resendOtp.visibility = View.INVISIBLE
     }
 }

@@ -23,11 +23,16 @@ class RemoteDataSource(private val service: PasswordResetService): RemoteDataI {
         return service.updatePassword(client_id, code, newPassword)
     }
 
+    override fun resendOtp(username: String, reset_option: String): Observable<ReceivedMessage> {
+        return service.resendOTP(RequestOTP(client_id, username, reset_option))
+    }
+
 
 }
 interface RemoteDataI{
     fun getMessageForUsername(username :String, reset_option: String): Observable<ReceivedMessage>
     fun getConfirmation(sid: String, code: String) : Observable<ConfirmationResponse>
     fun getUpdatePasswordConfirmation(code: String, newPassword:String):Observable<UpdatePasswordConfirmation>
+    fun resendOtp(username: String, reset_option: String):Observable<ReceivedMessage>
 
 }

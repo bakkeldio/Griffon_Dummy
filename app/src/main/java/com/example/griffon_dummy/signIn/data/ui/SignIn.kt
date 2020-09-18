@@ -92,6 +92,9 @@ class SignIn : Fragment(), ClientContract.View, KoinComponent {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         signUp.setOnClickListener {
+            val sharedPreferences = requireActivity().getSharedPreferences("Time", Context.MODE_PRIVATE)
+            sharedPreferences.edit().apply {  remove("Time")
+            remove("Timer")}.apply()
             findNavController().navigate(SignInDirections.toSignUp())
         }
         signIn.setOnClickListener {
@@ -133,6 +136,9 @@ class SignIn : Fragment(), ClientContract.View, KoinComponent {
         val ss = SpannableString(forgotPassword.text.toString())
         val clickableSpan1 = object  : ClickableSpan(){
             override fun onClick(widget: View) {
+                val sharedPreferences = requireActivity().getSharedPreferences("TimeRemind", Context.MODE_PRIVATE)
+                sharedPreferences.edit().apply {  remove("Time")
+                    remove("Timer")}.apply()
                 findNavController().navigate(SignInDirections.toPasswordReset())
             }
             override fun updateDrawState(ds: TextPaint) {

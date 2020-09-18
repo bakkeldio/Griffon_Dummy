@@ -2,7 +2,6 @@ package com.example.griffon_dummy.resetPassword.ui
 
 import android.graphics.Color
 import com.example.griffon_dummy.resetPassword.data.LocalDataI
-import com.example.griffon_dummy.resetPassword.data.RemoteDataI
 import com.example.griffon_dummy.resetPassword.data.ResetRepositoryI
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -23,7 +22,7 @@ class ConfirmOtpPresenter(
         view?.updateImage(results.logoImage!!)
     }
 
-    override fun putCode(sid: String,code: String) {
+    override fun putCode(sid: String, code: String) {
         val disposable = remoteRepositoryI.getConfirmation(sid, code)
             .subscribe({
             view?.getSid1(it.sid)
@@ -41,6 +40,7 @@ class ConfirmOtpPresenter(
     override fun resendOtp(username: String,resent_option: String) {
         val results = remoteRepositoryI.getOtpForUsername(username,resent_option).subscribe({
             view?.getSid(it.sid)
+            view?.addInfo(it.add_info)
         },{
             it.printStackTrace()
         })
@@ -60,5 +60,6 @@ interface ContractOtp{
         fun updateImage(url: String)
         fun getSid(sid : String)
         fun getSid1(message : String)
+        fun addInfo(addInfo: String)
     }
 }

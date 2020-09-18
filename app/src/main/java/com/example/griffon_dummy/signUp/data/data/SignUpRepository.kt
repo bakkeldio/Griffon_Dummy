@@ -17,7 +17,8 @@ class SignUpRepository(private val signUpLocal: SignUpLocalI, private val remote
     }
 
     override fun getAccessToken(username: String, password: String): Observable<AccessToken> {
-        return remoteDataSource.getAccessToken(username, password)
+        return remoteDataSource.getAccessToken(username, password).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun getSID(phoneNumber: String): Observable<PhoneRegister> {
@@ -30,7 +31,8 @@ class SignUpRepository(private val signUpLocal: SignUpLocalI, private val remote
     }
 
     override fun register(sid: String, password: String): Observable<AccessToken> {
-        return remoteDataSource.register(password, sid)
+        return remoteDataSource.register(password, sid).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
 

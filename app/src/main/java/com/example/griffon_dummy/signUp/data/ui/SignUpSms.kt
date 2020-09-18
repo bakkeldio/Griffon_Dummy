@@ -16,15 +16,16 @@ import com.example.griffon_dummy.R
 import kotlinx.android.synthetic.main.fragment_sign_up_sms.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import kotlin.time.ExperimentalTime
-
-
 
 class SignUpSms : Fragment(), ContractView3.View1 {
 
 
     private val presenter: ContractView3.SidPresenter by inject { parametersOf(this) }
-
     private lateinit var countdownTimer: CountDownTimer
     var isRunning: Boolean = false;
     var timeInMilliSeconds = 0L
@@ -39,13 +40,36 @@ class SignUpSms : Fragment(), ContractView3.View1 {
     @ExperimentalTime
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val sharedPref = activity?.getSharedPreferences("Time", Context.MODE_PRIVATE)
+
         presenter.getDesign()
         resendView.visibility = View.INVISIBLE
-            if (arguments != null) {
-                time.text = requireArguments().getString("time")
-                timeInMilliSeconds = time.text.toString().toLong() * 1000L
-                startTimer(timeInMilliSeconds)
+
+        if (arguments != null && sharedPref!!.getString("Time","") == "") {
+            time.text = requireArguments().getString("time")
+            timeInMilliSeconds = time.text.toString().toLong() * 1000L
+            startTimer(timeInMilliSeconds)
+        }
+        else {
+            val localTime = sharedPref!!.getString("Time", "")
+            val savedTime = sharedPref.getInt("Timer", 0)
+            if (savedTime != 0) {
+                if (localTime != "") {
+                    val localDateTime = LocalDateTime.parse(localTime).toLocalTime()
+                    val currentLocalTime = LocalTime.now()
+                    val difference: Long = Duration.between(localDateTime, currentLocalTime).seconds
+                    if (difference.minus(savedTime) > 0) {
+                        time.visibility = View.INVISIBLE
+                        resendView.visibility = View.VISIBLE
+                    } else {
+                        time.text = "${(savedTime - difference)}"
+                        timeInMilliSeconds = time.text.toString().toLong()*1000L
+                        startTimer(timeInMilliSeconds)
+
+                    }
+                }
             }
+        }
 
 
         verifyButton.setOnClickListener {
@@ -107,8 +131,14 @@ class SignUpSms : Fragment(), ContractView3.View1 {
     }
 
     override fun onStop() {
+        val sharedPref = activity?.getSharedPreferences("Time", Context.MODE_PRIVATE)
         countdownTimer.cancel()
+        sharedPref!!.edit().apply {  putString("Time", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
+                val minInSec = time.text[1].toString().toInt()*60
+                val seconds = (time.text[3].toString()+time.text[4].toString()).toInt()
+            putInt("Timer", minInSec+seconds)
 
+        }.apply()
         super.onStop()
     }
 

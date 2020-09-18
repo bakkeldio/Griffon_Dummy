@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Log
 import android.util.Patterns
 import android.view.*
 import android.widget.EditText
@@ -30,6 +31,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 
 import org.koin.core.parameter.parametersOf
+import java.util.regex.Pattern
 
 
 class SignUp : Fragment(), ContractView.View, KoinComponent{
@@ -60,7 +62,7 @@ class SignUp : Fragment(), ContractView.View, KoinComponent{
                 Toast.makeText(context, "Check terms and conditions", Toast.LENGTH_LONG).show()
             }
             when {
-                emailNumber.text.toString().isValidEmail() -> {
+                emailNumber.text.toString().isEmailValid() -> {
                     val bundle = bundleOf("email" to emailNumber.text.toString())
                     findNavController().navigate(R.id.toMainSignUp,bundle)
 
@@ -72,7 +74,7 @@ class SignUp : Fragment(), ContractView.View, KoinComponent{
                     if (emailNumber.text!!.isEmpty()){
                         emailNumberSignUp.error = "Provide username"
                     }
-                    if (emailNumber.text!!.isNotEmpty() && (!emailNumber.text.toString().isValidMobile()||!emailNumber.text.toString().isValidEmail())){
+                    if (emailNumber.text!!.isNotEmpty() && (!emailNumber.text.toString().isValidMobile()||!emailNumber.text.toString().isEmailValid())){
                         emailNumberSignUp.error = "Provide valid mobile/email"
                     }
 
@@ -102,17 +104,25 @@ class SignUp : Fragment(), ContractView.View, KoinComponent{
 
 
 
-
     }
 
     override fun onDestroy() {
+        Log.d("DestroySignUp: ", "Running")
         presenter.onDestroy()
         super.onDestroy()
     }
 
 
-    private fun String.isValidEmail(): Boolean =
-        this.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
+    fun String.isEmailValid() =
+        Pattern.compile(
+            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+                    "\\@" +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                    "(" +
+                    "\\." +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                    ")+"
+        ).matcher(this).matches()
 
     private fun String.isValidMobile(): Boolean {
         return Patterns.PHONE.matcher(this).matches()
@@ -153,7 +163,6 @@ class SignUp : Fragment(), ContractView.View, KoinComponent{
     }
 
     override fun takeSidDuration(sid: String, time: String) {
-        val action = SignUpSmsDirections
         val bundle = bundleOf("sid" to sid, "time" to time)
         findNavController().navigate(R.id.signUpSms, bundle)
     }
@@ -166,7 +175,10 @@ class SignUp : Fragment(), ContractView.View, KoinComponent{
         ContextCompat.startActivity(context, browser, null)
     }
 
-
+    override fun onStop() {
+        Log.d("StopSignUp: ", "Running")
+        super.onStop()
+    }
 
     fun String?.asUri() : Uri? {
         try {

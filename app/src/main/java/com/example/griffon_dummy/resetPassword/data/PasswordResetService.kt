@@ -13,6 +13,12 @@ interface PasswordResetService {
         @Body body: RequestOTP
     ):Observable<ReceivedMessage>
 
+    @PUT("api/v1/oauth/password/reset")
+    fun resendOTP(
+        @Body body: RequestOTP
+    )
+    : Observable<ReceivedMessage>
+
     @Headers("Content-type: application/json")
     @POST("api/v1/oauth/password/reset/verify")
     fun verifyEmail(
