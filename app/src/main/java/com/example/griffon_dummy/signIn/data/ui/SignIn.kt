@@ -14,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -22,7 +21,6 @@ import com.example.griffon_dummy.GlideApp
 import com.example.griffon_dummy.MainActivity
 import com.example.griffon_dummy.R
 import com.example.griffon_dummy.signUp.data.entity.AccessToken
-import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 import org.koin.core.KoinComponent
