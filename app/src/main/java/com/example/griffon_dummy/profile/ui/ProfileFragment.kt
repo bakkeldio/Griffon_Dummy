@@ -142,6 +142,7 @@ class ProfileFragment : Fragment() , ProfileContract.View{
                 .centerCrop()
                 .into(userLogo)
         }
+        emailVerification.text = userInfo.email_verified.toString()
 
     }
 

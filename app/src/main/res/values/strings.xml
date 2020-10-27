@@ -4,4 +4,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="terms_and_conditions">I agree with terms and conditions</string>
+    <string name="labelEmail">Email :</string>
+    <string name="email_address">Email address</string>
+    <string name="email_verified">Email Verified: </string>
+    <string name="FalseDefault">False</string>
+    <string name="log_out">LOG OUT</string>
 </resources>

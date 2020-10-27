@@ -32,9 +32,6 @@ class SignIn : Fragment(), ClientContract.View, KoinComponent {
 
     private val presenter: ClientContract.Presenter by inject { parametersOf(this) }
 
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
