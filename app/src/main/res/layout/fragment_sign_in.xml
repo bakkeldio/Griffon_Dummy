@@ -94,6 +94,7 @@
         android:layout_width="287dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
+        android:background="#FFFFFF"
         android:text="Sign In Now"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
