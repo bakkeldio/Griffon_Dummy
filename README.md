@@ -1,6 +1,6 @@
 # Griffon_Dummy
 ## Description
-Griffon dummy is a client which used for authorization called Griffon.It can be used in any project.
+Griffon dummy is a client which used for authorization called Griffon.
 Our software can be connected as library to any project, which will used Griffon for authorization. It contains 
 registration, authorization, remid password options.
 ## Some screenshots from an app
