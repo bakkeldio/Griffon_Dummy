@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/signIn">
+    <fragment
+        android:id="@+id/signIn"
+        android:name="com.example.griffon_dummy.signIn.data.ui.SignIn"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in">
+        <action
+            android:id="@+id/toSignUp"
+            app:destination="@+id/signUp"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/toPasswordReset"
+            app:destination="@+id/password_reset"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/password_reset"
+        android:name="com.example.griffon_dummy.resetPassword.ui.PasswordReset"
+        android:label="fragment_password_reset"
+        tools:layout="@layout/fragment_password_reset">
+        <action
+            android:id="@+id/toUpdatePassword"
+            app:destination="@+id/update_password"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/toConfirmOTP"
+            app:destination="@+id/confirm_otp"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out">
+            <argument
+                android:name="time"
+                android:defaultValue="1"
+                app:argType="string" />
+            <argument
+                android:name="username"
+                app:argType="string" />
+            <argument
+                android:name="reset_option"
+                app:argType="string" />
+            <argument
+                android:name="sid"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/confirm_otp"
+        android:name="com.example.griffon_dummy.resetPassword.ui.ConfirmOTP"
+        android:label="fragment_confirm_o_t_p"
+        tools:layout="@layout/fragment_confirm_o_t_p">
+        <argument
+            android:name="time"
+            app:argType="string"
+            android:defaultValue="0" />
+        <argument
+            android:name="sid"
+            app:argType="string"
+            android:defaultValue="0"/>
+
+        <argument
+            android:name="username"
+            app:argType="string"/>
+        <argument
+            android:name="reset_option"
+            app:argType="string"/>
+
+        <action
+            android:id="@+id/toUpdatePassword"
+            app:destination="@+id/update_password"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out">
+            <argument
+                android:name="sid"
+                android:defaultValue="1"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/update_password"
+        android:name="com.example.griffon_dummy.resetPassword.ui.UpdatePassword"
+        android:label="fragment_update_password"
+        tools:layout="@layout/fragment_update_password">
+        <argument
+            android:name="sid"
+            app:argType="string" />
+        <action
+            android:id="@+id/toSignIn"
+            app:destination="@+id/signIn"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"></action>
+    </fragment>
+    <fragment
+        android:id = "@+id/signUp"
+        android:name="com.example.griffon_dummy.signUp.data.ui.SignUp"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up">
+        <action
+            android:id="@+id/toSignIn"
+            app:destination="@+id/signIn"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"
+            app:popUpTo="@+id/signIn"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/toSignUpSms"
+            app:destination="@+id/signUpSms"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out">
+            <argument
+                android:name="sid"
+                android:defaultValue="0"
+                app:argType="string" />
+            <argument
+                android:name="time"
+                android:defaultValue="0"
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/toMainSignUp"
+            app:destination="@+id/mainSignUp"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpSms"
+        android:name="com.example.griffon_dummy.signUp.data.ui.SignUpSms"
+        android:label="fragment_sign_up_sms"
+        tools:layout="@layout/fragment_sign_up_sms" >
+        <action
+            android:id="@+id/toMainSignUp"
+            app:destination="@+id/mainSignUp"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/toSignUp"
+            app:destination="@+id/signUp"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"
+            app:popUpTo="@id/signUp"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainSignUp"
+        android:name="com.example.griffon_dummy.signUp.data.ui.MainSignUp"
+        android:label="fragment_main_sign_up"
+        tools:layout="@layout/fragment_main_sign_up" >
+        <action
+            android:id="@+id/toSignIn"
+            app:destination="@+id/signIn"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+    </fragment>
+</navigation>
